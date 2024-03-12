@@ -12,7 +12,7 @@ export class GroupsService {
   async create(createGroupDto: CreateGroupDto): Promise<Group> {
     if (await this.groupsRepository.exists({
       where: { name: createGroupDto.name }
-    })) throw new ConflictException('Email already assigned!');
+    })) throw new ConflictException('Name already assigned!');
 
     const group: Group = this.groupsRepository.create(createGroupDto);
 
