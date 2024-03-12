@@ -10,7 +10,9 @@ export class GroupsService {
   constructor(@InjectRepository(Group) private readonly groupsRepository: Repository<Group>) { }
 
   async create(createGroupDto: CreateGroupDto): Promise<Group> {
-    if (await this.groupsRepository.exists({ where: { name: createGroupDto.name } })) throw new ConflictException('Email already assigned!');
+    if (await this.groupsRepository.exists({
+      where: { name: createGroupDto.name }
+    })) throw new ConflictException('Email already assigned!');
 
     const group: Group = this.groupsRepository.create(createGroupDto);
 
@@ -24,7 +26,7 @@ export class GroupsService {
   async findOne(id: string): Promise<Group> {
     const group: Group | null = await this.groupsRepository.findOne({
       where: { id: id },
-      relations: { admin: true }
+      relations: { admin: true, users: { user: true } }
     });
 
     if (!group) throw new NotFoundException();

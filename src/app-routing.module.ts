@@ -1,12 +1,19 @@
 import { Module } from "@nestjs/common";
 import { RouterModule, Routes } from "@nestjs/core";
+import { GroupUsersModule } from './group-users/group-users.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from "./users/users.module";
 
 const routes: Routes = [
     {
         path: 'groups',
-        module: GroupsModule
+        module: GroupsModule,
+        children: [
+            {
+                path: ':groupId/users',
+                module: GroupUsersModule
+            }
+        ]
     },
     {
         path: 'users',
@@ -17,8 +24,9 @@ const routes: Routes = [
 @Module({
     imports: [
         RouterModule.register(routes),
-        UsersModule,
-        GroupsModule
+        GroupUsersModule,
+        GroupsModule,
+        UsersModule
     ]
 })
 export class AppRoutingModule { }

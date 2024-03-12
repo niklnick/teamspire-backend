@@ -22,7 +22,10 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user: User | null = await this.usersRepository.findOne({ where: { id: id } });
+    const user: User | null = await this.usersRepository.findOne({
+      where: { id: id },
+      relations: { groups: { group: true } }
+    });
 
     if (!user) throw new NotFoundException();
 
