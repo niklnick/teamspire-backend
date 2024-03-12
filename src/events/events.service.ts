@@ -20,8 +20,8 @@ export class EventsService {
 
     const organizer: User = await this.dataSource
       .createQueryBuilder(User, 'user')
-      .leftJoinAndSelect('user.groups', 'group_user')
-      .where('group_user.group.id = :groupId', { groupId })
+      .leftJoinAndSelect('user.groups', 'group')
+      .where('group.id = :groupId', { groupId })
       .orderBy('RANDOM()')
       .getOne();
     const event: Event = this.eventsRepository.create({

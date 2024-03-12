@@ -1,7 +1,6 @@
 import { Event } from "src/events/entities/event.entity";
-import { GroupUser } from "src/group-users/entities/group-user.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Group {
@@ -9,14 +8,19 @@ export class Group {
     id: string;
 
     @Column({ unique: true })
-    name: string;
+    title: string;
+
+    @ManyToMany(() => User, (user: User) => user.groups, { cascade: true })
+    @JoinTable({
+        name: 'group_user',
+        joinColumn: { name: 'group_id' },
+        inverseJoinColumn: { name: 'user_id' }
+    })
+    users: User[];
 
     @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'admin_id' })
     admin: User;
-
-    @OneToMany(() => GroupUser, (groupUser: GroupUser) => groupUser.group, { cascade: true })
-    users: GroupUser[];
 
     @OneToMany(() => Event, (event: Event) => event.group)
     events: Event[];

@@ -10,7 +10,9 @@ export class UsersService {
   constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    if (await this.usersRepository.exists({ where: { email: createUserDto.email } })) throw new ConflictException('Email already assigned!');
+    if (await this.usersRepository.exists({
+      where: { email: createUserDto.email }
+    })) throw new ConflictException('Email already assigned!');
 
     const user: User = this.usersRepository.create(createUserDto);
 
@@ -24,7 +26,7 @@ export class UsersService {
   async findOne(id: string): Promise<User> {
     const user: User | null = await this.usersRepository.findOne({
       where: { id: id },
-      relations: { groups: { group: true } }
+      relations: { groups: true }
     });
 
     if (!user) throw new NotFoundException();
