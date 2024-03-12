@@ -1,3 +1,4 @@
+import { Event } from "src/events/entities/event.entity";
 import { GroupUser } from "src/group-users/entities/group-user.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
@@ -16,4 +17,7 @@ export class Group {
 
     @OneToMany(() => GroupUser, (groupUser: GroupUser) => groupUser.group, { cascade: true })
     users: GroupUser[];
+
+    @OneToMany(() => Event, (event: Event) => event.group)
+    events: Event[];
 }
