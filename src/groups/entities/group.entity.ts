@@ -2,7 +2,7 @@ import { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Activity {
+export class Group {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -10,6 +10,6 @@ export class Activity {
     title: string;
 
     @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'creator_id' })
-    creator: User;
+    @JoinColumn({ name: 'admin_id' })
+    admin: User;
 }
