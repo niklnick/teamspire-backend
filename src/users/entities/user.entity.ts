@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { GroupUser } from "src/groups/entities/group-user.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -7,4 +8,7 @@ export class User {
 
     @Column({ unique: true })
     email: string;
+
+    @OneToMany(() => GroupUser, (groupUser: GroupUser) => groupUser.user)
+    groups: GroupUser[];
 }
