@@ -6,7 +6,7 @@ export class Activity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ unique: true })
+    @Column()
     title: string;
 
     @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })

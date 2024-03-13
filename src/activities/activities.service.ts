@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateActivityDto } from './dto/create-activity.dto';
@@ -10,10 +10,6 @@ export class ActivitiesService {
   constructor(@InjectRepository(Activity) private readonly activitiesRepository: Repository<Activity>) { }
 
   async create(createActivityDto: CreateActivityDto): Promise<Activity> {
-    if (await this.activitiesRepository.exists({
-      where: { title: createActivityDto.title }
-    })) throw new ConflictException('Title already assigned!');
-
     const activity: Activity = this.activitiesRepository.create(createActivityDto);
 
     return await this.activitiesRepository.save(activity);

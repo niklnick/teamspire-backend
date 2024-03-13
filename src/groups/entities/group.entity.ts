@@ -1,3 +1,4 @@
+import { Event } from "src/events/entities/event.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { GroupUser } from "./group-user.entity";
@@ -7,7 +8,7 @@ export class Group {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ unique: true })
+    @Column()
     title: string;
 
     @OneToMany(() => GroupUser, (groupUser: GroupUser) => groupUser.group, { cascade: true })
@@ -17,4 +18,7 @@ export class Group {
     @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'admin_id' })
     admin: User;
+
+    @OneToMany(() => Event, (event: Event) => event.group)
+    events: Event[];
 }
