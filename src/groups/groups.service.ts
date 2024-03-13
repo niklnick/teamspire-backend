@@ -22,7 +22,7 @@ export class GroupsService {
   async findOne(id: string): Promise<Group> {
     const group: Group | null = await this.groupsRepository.findOne({
       where: { id: id },
-      relations: { users: { user: true }, admin: true, events: true }
+      relations: { users: true, admin: true, events: true }
     });
 
     if (!group) throw new NotFoundException();

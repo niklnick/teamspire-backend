@@ -1,6 +1,6 @@
 import { EventUser } from "src/events/entities/event-user.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Activity {
@@ -9,6 +9,12 @@ export class Activity {
 
     @Column()
     title: string;
+
+    @CreateDateColumn({ name: 'create_date' })
+    createDate: Date;
+
+    @UpdateDateColumn({ name: 'update_date' })
+    updateDate: Date;
 
     @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'creator_id' })
