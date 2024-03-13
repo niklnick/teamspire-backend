@@ -1,6 +1,6 @@
-import { User } from "src/users/entities/user.entity";
+import { EventActivity } from "../entities/event-activity.entity";
 
 export class CreateEventDto {
     readonly title: string;
-    readonly organizer: User;
+    readonly activities: EventActivity[];
 }
