@@ -3,6 +3,7 @@ import { User } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { EventStatus } from "../enums/event-status.enum";
 import { EventActivity } from "./event-activity.entity";
+import { EventUser } from "./event-user.entity";
 
 @Entity()
 export class Event {
@@ -28,6 +29,9 @@ export class Event {
     @ManyToOne(() => User, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'organizer_id' })
     organizer: User;
+
+    @OneToMany(() => EventUser, (eventUser: EventUser) => eventUser.event, { cascade: true })
+    users: EventUser[];
 
     @OneToMany(() => EventActivity, (eventActivity: EventActivity) => eventActivity.event, { cascade: true })
     activities: EventActivity[];

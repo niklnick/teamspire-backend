@@ -16,13 +16,20 @@ export class EventsService {
   async create(groupId: string, createEventDto: CreateEventDto): Promise<Event> {
     const organizer: User = await this.dataSource
       .createQueryBuilder(User, 'user')
-      .leftJoin('user.groups', 'group', 'group.group_id = :groupId', { groupId })
+      .leftJoin('user.groups', 'group', 'group.id = :groupId', { groupId })
       .orderBy('RANDOM()')
       .getOne();
+    const groupUsers: User[] = await this.dataSource
+      .createQueryBuilder(User, 'user')
+      .leftJoin('user.groups', 'group', 'group.id = :groupId', { groupId })
+      .getMany();
 
     const event: Event = this.eventsRepository.create({
       group: { id: groupId },
       organizer: organizer,
+      users: groupUsers.map((user: User) => {
+        return { user: user }
+      }),
       ...createEventDto
     });
 
