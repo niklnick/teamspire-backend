@@ -1,4 +1,4 @@
-import { EventUser } from "src/events/entities/event-user.entity";
+import { EventUser } from "src/event-users/entities/event-user.entity";
 import { Group } from "src/groups/entities/group.entity";
 import { Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -16,7 +16,6 @@ export class User {
     @ManyToMany(() => Group, (group: Group) => group.users)
     groups: Group[];
 
-    // TODO: Cascade on patch doesnt work. User should be able to delete to unparticipate, or add an activity vote
-    @OneToMany(() => EventUser, (eventUser: EventUser) => eventUser.user, { cascade: true })
+    @OneToMany(() => EventUser, (eventUser: EventUser) => eventUser.user)
     events: EventUser[];
 }

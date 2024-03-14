@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { RouterModule } from "@nestjs/core";
 import { ActivitiesModule } from './activities/activities.module';
+import { EventUsersModule } from './event-users/event-users.module';
 import { EventsModule } from './events/events.module';
 import { GroupsModule } from './groups/groups.module';
 import { UsersModule } from "./users/users.module";
@@ -18,7 +19,13 @@ import { UsersModule } from "./users/users.module";
                 children: [
                     {
                         path: ':groupId/events',
-                        module: EventsModule
+                        module: EventsModule,
+                        children: [
+                            {
+                                path: ':eventId/users',
+                                module: EventUsersModule
+                            }
+                        ]
                     }
                 ]
             },
@@ -28,6 +35,7 @@ import { UsersModule } from "./users/users.module";
             }
         ]),
         ActivitiesModule,
+        EventUsersModule,
         EventsModule,
         GroupsModule,
         UsersModule

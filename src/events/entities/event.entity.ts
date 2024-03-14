@@ -1,9 +1,9 @@
+import { Activity } from "src/activities/entities/activity.entity";
+import { EventUser } from "src/event-users/entities/event-user.entity";
 import { Group } from "src/groups/entities/group.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { EventStatus } from "../enums/event-status.enum";
-import { EventActivity } from "./event-activity.entity";
-import { EventUser } from "./event-user.entity";
 
 @Entity()
 export class Event {
@@ -33,6 +33,11 @@ export class Event {
     @OneToMany(() => EventUser, (eventUser: EventUser) => eventUser.event, { cascade: true })
     users: EventUser[];
 
-    @OneToMany(() => EventActivity, (eventActivity: EventActivity) => eventActivity.event, { cascade: true })
-    activities: EventActivity[];
+    @ManyToMany(() => Activity)
+    @JoinTable({
+        name: 'event_activity',
+        joinColumn: { name: 'event_id' },
+        inverseJoinColumn: { name: 'activity_id' }
+    })
+    activities: Activity[];
 }

@@ -1,7 +1,7 @@
 import { Activity } from "src/activities/entities/activity.entity";
+import { Event } from "src/events/entities/event.entity";
 import { User } from "src/users/entities/user.entity";
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { Event } from "./event.entity";
 
 @Entity()
 export class EventUser {
