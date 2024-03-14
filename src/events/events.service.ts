@@ -43,10 +43,14 @@ export class EventsService {
   }
 
   async findOne(groupId: string, id: string): Promise<Event> {
-    const event: Event | null = await this.eventsRepository.findOne({
-      where: { id: id, group: { id: groupId } },
-      relations: { organizer: true, activities: { userVotes: { user: true } } }
-    });
+    const event: Event | null = await this.eventsRepository
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.organizer', 'organizer')
+      .leftJoinAndSelect('event.activities', 'activities')
+      .leftJoinAndSelect('activities.userVotes', 'userVotes', 'userVotes.eventId = :eventId', { eventId: id })
+      .where('event.id = :eventId', { eventId: id })
+      .andWhere('event.group.id = :groupId', { groupId: groupId })
+      .getOne();
 
     if (!event) throw new NotFoundException();
 
