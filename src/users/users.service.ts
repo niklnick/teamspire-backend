@@ -26,7 +26,7 @@ export class UsersService {
   async findOne(id: string): Promise<User> {
     const user: User | null = await this.usersRepository.findOne({
       where: { id: id },
-      relations: { groups: true }
+      relations: { groups: true, events: { event: true, votedActivity: true } }
     });
 
     if (!user) throw new NotFoundException();
@@ -34,8 +34,10 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user: User | null = await this.usersRepository.findOne({ where: { id: id } });
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const user: User | null = await this.usersRepository.findOne({
+      where: { id: id }
+    });
 
     if (!user) throw new NotFoundException();
 
@@ -43,7 +45,9 @@ export class UsersService {
   }
 
   async remove(id: string): Promise<User> {
-    const user: User | null = await this.usersRepository.findOne({ where: { id: id } });
+    const user: User | null = await this.usersRepository.findOne({
+      where: { id: id }
+    });
 
     if (!user) throw new NotFoundException();
 

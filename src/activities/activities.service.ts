@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateActivityDto } from './dto/create-activity.dto';
@@ -10,17 +10,13 @@ export class ActivitiesService {
   constructor(@InjectRepository(Activity) private readonly activitiesRepository: Repository<Activity>) { }
 
   async create(createActivityDto: CreateActivityDto): Promise<Activity> {
-    if (await this.activitiesRepository.exists({
-      where: { title: createActivityDto.title }
-    })) throw new ConflictException('Title already assigned!');
-
     const activity: Activity = this.activitiesRepository.create(createActivityDto);
 
     return await this.activitiesRepository.save(activity);
   }
 
   async findAll(): Promise<Activity[]> {
-    return await this.activitiesRepository.find({ relations: { creator: true } });
+    return await this.activitiesRepository.find();
   }
 
   async findOne(id: string): Promise<Activity> {
@@ -34,8 +30,10 @@ export class ActivitiesService {
     return activity;
   }
 
-  async update(id: string, updateActivityDto: UpdateActivityDto) {
-    const activity: Activity | null = await this.activitiesRepository.findOne({ where: { id: id } });
+  async update(id: string, updateActivityDto: UpdateActivityDto): Promise<Activity> {
+    const activity: Activity | null = await this.activitiesRepository.findOne({
+      where: { id: id }
+    });
 
     if (!activity) throw new NotFoundException();
 
@@ -43,7 +41,9 @@ export class ActivitiesService {
   }
 
   async remove(id: string): Promise<Activity> {
-    const activity: Activity | null = await this.activitiesRepository.findOne({ where: { id: id } });
+    const activity: Activity | null = await this.activitiesRepository.findOne({
+      where: { id: id }
+    });
 
     if (!activity) throw new NotFoundException();
 
